@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Starter, DashboardSummary, CreateStarterInput } from "@/types/starter";
+import { Starter, CreateStarterInput } from "@/types/starter";
 import { startersService } from "@/services/starters.service";
 import { Header } from "@/components/layout/Header";
 import { StarterCard } from "@/components/starters/StarterCard";
@@ -9,37 +9,30 @@ import { StarterFormModal } from "@/components/starters/StarterFormModal";
 import { DeleteStarterDialog } from "@/components/starters/DeleteStarterDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 import { Plus, Search } from "lucide-react";
 import { toast } from "sonner";
-import Link from "next/link";
 
-export default function DashboardPage() {
+export default function FermentosPage() {
   const [starters, setStarters] = useState<Starter[]>([]);
-  const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [starterToEdit, setStarterToEdit] = useState<Starter | null>(null);
   const [starterToDelete, setStarterToDelete] = useState<Starter | null>(null);
 
-  const loadData = async () => {
+  const loadStarters = async () => {
     try {
-      const [startersData, summaryData] = await Promise.all([
-        startersService.getAll(search),
-        startersService.getSummary(),
-      ]);
-      setStarters(startersData);
-      setSummary(summaryData);
+      const data = await startersService.getAll(search);
+      setStarters(data);
     } catch {
-      toast.error("Erro ao carregar dados do backend.");
+      toast.error("Erro ao carregar a lista de fermentos.");
     }
   };
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      loadData();
+    const timer = setTimeout(() => {
+      loadStarters();
     }, 300);
-    return () => clearTimeout(timeout);
+    return () => clearTimeout(timer);
   }, [search]);
 
   const handleSaveStarter = async (data: CreateStarterInput) => {
@@ -51,7 +44,7 @@ export default function DashboardPage() {
         await startersService.create(data);
         toast.success("Novo fermento criado com sucesso!");
       }
-      loadData();
+      loadStarters();
     } catch {
       toast.error("Erro ao salvar fermento.");
     }
@@ -61,8 +54,8 @@ export default function DashboardPage() {
     if (!starterToDelete) return;
     try {
       await startersService.delete(starterToDelete.id);
-      toast.success("Fermento excluído.");
-      loadData();
+      toast.success("Fermento excluído com sucesso.");
+      loadStarters();
     } catch {
       toast.error("Erro ao excluir fermento.");
     } finally {
@@ -74,15 +67,15 @@ export default function DashboardPage() {
     <div className="min-h-screen flex flex-col">
       <Header />
 
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8 space-y-8">
-        {/* Cabeçalho do Painel */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8 space-y-6">
+        {/* Cabeçalho */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              Painel de fermentação
+              Fermentos
             </h1>
             <p className="text-sm text-muted-foreground">
-              Acompanhe e gerencie a saúde dos seus fermentos naturais.
+              Gerencie o cadastro completo dos seus fermentos naturais.
             </p>
           </div>
 
@@ -97,49 +90,7 @@ export default function DashboardPage() {
           </Button>
         </div>
 
-        {/* Métricas do Sumário */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="p-5">
-              <div className="text-2xl font-bold">
-                {summary?.activeStartersCount || 0}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Fermentos cadastrados
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-5">
-              <div className="text-2xl font-bold text-emerald-600">
-                {summary?.healthyCount || 0}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">Saudáveis</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-5">
-              <div className="text-2xl font-bold text-amber-600">
-                {summary?.attentionCount || 0}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Precisam de atenção
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-5">
-              <div className="text-2xl font-bold text-zinc-600">
-                {summary?.newCount || 0}
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Novos cultivos
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Barra de Busca */}
+        {/* Campo de Busca conforme a imagem lista_fermentos.png */}
         <div className="relative max-w-md">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -150,21 +101,9 @@ export default function DashboardPage() {
           />
         </div>
 
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-foreground">
-            Seus fermentos
-          </h2>
-          <Link
-            href="/fermentos"
-            className="text-sm font-medium text-primary hover:underline flex items-center gap-1"
-          >
-            Ver todos &rarr;
-          </Link>
-        </div>
-
-        {/* Listagem de Cards */}
+        {/* Grid de Fermentos */}
         {starters.length === 0 ? (
-          <div className="text-center py-12 border rounded-xl bg-card/50">
+          <div className="text-center py-16 border rounded-xl bg-card/50">
             <p className="text-muted-foreground text-sm">
               Nenhum fermento encontrado.
             </p>
@@ -186,7 +125,7 @@ export default function DashboardPage() {
         )}
       </main>
 
-      {/* Modais */}
+      {/* Modais de Ação */}
       <StarterFormModal
         open={modalOpen}
         onOpenChange={setModalOpen}
