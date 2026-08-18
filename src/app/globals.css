@@ -48,7 +48,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-:root {
+/* :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -81,6 +81,38 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+} */
+
+:root {
+  --background: 38 45% 97%;
+  --foreground: 24 20% 15%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 24 20% 15%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 24 20% 15%;
+
+  --primary: 28 85% 42%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 35 30% 92%;
+  --secondary-foreground: 24 20% 15%;
+
+  --muted: 35 25% 93%;
+  --muted-foreground: 24 10% 45%;
+
+  --accent: 35 35% 90%;
+  --accent-foreground: 24 20% 15%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 35 20% 88%;
+  --input: 35 20% 85%;
+  --ring: 28 85% 42%;
+
+  --radius: 0.75rem;
 }
 
 .dark {
@@ -122,7 +154,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
   }
   html {
     @apply font-sans;
