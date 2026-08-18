@@ -58,7 +58,7 @@ export function StarterFormModal({
     }
   }, [starterToEdit, open]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!name.trim() || !location.trim()) return;
 
@@ -99,7 +99,10 @@ export function StarterFormModal({
 
           <div className="space-y-1.5">
             <Label htmlFor="flour">Tipo de farinha</Label>
-            <Select value={flourType} onValueChange={setFlourType}>
+            <Select
+              value={flourType}
+              onValueChange={(value) => setFlourType(value ?? "")}
+            >
               <SelectTrigger id="flour">
                 <SelectValue placeholder="Selecione o tipo" />
               </SelectTrigger>
@@ -130,7 +133,9 @@ export function StarterFormModal({
               <Label htmlFor="status">Status de Saúde</Label>
               <Select
                 value={status}
-                onValueChange={(val: StarterStatus) => setStatus(val)}
+                onValueChange={(val: StarterStatus | null) =>
+                  val && setStatus(val)
+                }
               >
                 <SelectTrigger id="status">
                   <SelectValue />
