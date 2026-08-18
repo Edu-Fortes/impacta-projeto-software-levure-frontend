@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { href: "/", label: "Painel", icon: LayoutDashboard },
-  { href: "/starters", label: "Fermentos", icon: Wheat },
+  { href: "/fermentos", label: "Fermentos", icon: Wheat },
 ];
 
 export function Header() {
