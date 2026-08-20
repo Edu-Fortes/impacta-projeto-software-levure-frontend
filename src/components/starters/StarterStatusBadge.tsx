@@ -8,13 +8,13 @@ const statusConfig: Record<
   StarterStatus,
   { label: string; className: string }
 > = {
-  HEALTHY: {
-    label: "Saudável",
+  ACTIVE: {
+    label: "Ativo",
     className: "bg-emerald-50 text-emerald-700 border-emerald-200",
   },
-  ATTENTION: {
-    label: "Atenção",
-    className: "bg-amber-50 text-amber-700 border-amber-200",
+  FRIDGE: {
+    label: "Hibernando",
+    className: "bg-blue-50 text-blue-700 border-blue-200",
   },
   NEW: {
     label: "Novo",

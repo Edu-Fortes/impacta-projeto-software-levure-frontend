@@ -30,8 +30,8 @@ interface StarterFormModalProps {
 }
 
 const starterStatusLabels: Record<StarterStatus, string> = {
-  HEALTHY: "Saudável",
-  ATTENTION: "Atenção",
+  ACTIVE: "Ativo",
+  FRIDGE: "Hibernando",
   NEW: "Novo",
 };
 
@@ -151,8 +151,8 @@ export function StarterFormModal({
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="HEALTHY">Saudável</SelectItem>
-                  <SelectItem value="ATTENTION">Atenção</SelectItem>
+                  <SelectItem value="ACTIVE">Ativo</SelectItem>
+                  <SelectItem value="FRIDGE">Hibernando</SelectItem>
                   <SelectItem value="NEW">Novo</SelectItem>
                 </SelectContent>
               </Select>
