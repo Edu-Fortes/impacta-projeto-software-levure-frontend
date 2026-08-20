@@ -1,4 +1,4 @@
-export type StarterStatus = "HEALTHY" | "ATTENTION" | "NEW";
+export type StarterStatus = "ACTIVE" | "FRIDGE" | "NEW";
 
 export interface Starter {
   id: string;

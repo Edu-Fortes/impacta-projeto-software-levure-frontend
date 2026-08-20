@@ -30,8 +30,8 @@ interface StarterFormModalProps {
 }
 
 const starterStatusLabels: Record<StarterStatus, string> = {
-  HEALTHY: "Saudável",
-  ATTENTION: "Atenção",
+  ACTIVE: "Ativo",
+  FRIDGE: "Hibernando",
   NEW: "Novo",
 };
 
@@ -109,7 +109,7 @@ export function StarterFormModal({
               value={flourType}
               onValueChange={(value) => setFlourType(value ?? "")}
             >
-              <SelectTrigger id="flour">
+              <SelectTrigger id="flour" className="md:w-1/2">
                 <SelectValue placeholder="Selecione o tipo" />
               </SelectTrigger>
               <SelectContent>
@@ -143,7 +143,7 @@ export function StarterFormModal({
                   val && setStatus(val)
                 }
               >
-                <SelectTrigger id="status">
+                <SelectTrigger id="status" className="md:w-1/2">
                   <SelectValue>
                     {(value: StarterStatus | null) =>
                       value ? starterStatusLabels[value] : "Selecione o status"
@@ -151,8 +151,8 @@ export function StarterFormModal({
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="HEALTHY">Saudável</SelectItem>
-                  <SelectItem value="ATTENTION">Atenção</SelectItem>
+                  <SelectItem value="ACTIVE">Ativo</SelectItem>
+                  <SelectItem value="FRIDGE">Hibernando</SelectItem>
                   <SelectItem value="NEW">Novo</SelectItem>
                 </SelectContent>
               </Select>
