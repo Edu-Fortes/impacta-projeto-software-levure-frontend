@@ -29,6 +29,12 @@ interface StarterFormModalProps {
   onSubmit: (data: CreateStarterInput) => Promise<void>;
 }
 
+const starterStatusLabels: Record<StarterStatus, string> = {
+  HEALTHY: "Saudável",
+  ATTENTION: "Atenção",
+  NEW: "Novo",
+};
+
 export function StarterFormModal({
   open,
   onOpenChange,
@@ -138,7 +144,11 @@ export function StarterFormModal({
                 }
               >
                 <SelectTrigger id="status">
-                  <SelectValue />
+                  <SelectValue>
+                    {(value: StarterStatus | null) =>
+                      value ? starterStatusLabels[value] : "Selecione o status"
+                    }
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="HEALTHY">Saudável</SelectItem>
