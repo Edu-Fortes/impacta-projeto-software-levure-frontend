@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Levure - Frontend WebApp
 
-## Getting Started
+Interface moderna e responsiva para acompanhamento da saúde, cálculos de alimentação e rotina de fermentos naturais (_Levain_). Desenvolvido com foco em usabilidade doméstica e separação de conceitos (_Separation of Concerns_).
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tecnologias Utilizadas
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Framework:** Next.js 16 (App Router) & React
+- **Linguagem:** TypeScript
+- **Estilização & UI:** Tailwind CSS & Shadcn/ui (Radix UI)
+- **Ícones:** Lucide React
+- **Feedback Visual & Notificações:** Sonner (Toasts)
+- **Comunicação HTTP:** Axios
+- **Containerização:** Docker (Multi-stage build com `standalone output`)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Design & Funcionalidades (Sprint 1)
 
-## Learn More
+- **Dashboard Geral (`/`):** Visão rápida de métricas (total cadastrado, saudáveis, em atenção e novos cultivos) e prévia dos fermentos.
+- **Catálogo de Fermentos (`/fermentos`):** Listagem dedicada com busca em tempo real por nome, tipo de farinha ou local do pote.
+- **Modal de Cadastro/Edição:** Criação e manutenção de fermentos com validações de interface.
+- **Exclusão com Confirmação:** Modal de diálogo de alerta para evitar remoções acidentais.
+- **Tema Visual Customizado:** Paleta quente e orgânica inspirada no processo artesanal de panificação.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Como Executar com Docker (Recomendado para Avaliação)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Pré-requisitos
 
-## Deploy on Vercel
+- [Docker](https://docs.docker.com/get-docker/) instalado.
+- A [API Backend](https://github.com/Edu-Fortes/impacta-projeto-software-levure-backend) (`levure-backend`) deve estar em execução na porta `3001`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Passo a Passo
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/Edu-Fortes/impacta-projeto-software-levure-frontend.git
+   cd impacta-projeto-software-levure-frontend
+   ```
+2. **Suba o container do Frontend:**
+
+   ```bash
+   docker compose up -d --build
+   ```
+
+3. **Acesse a aplicação:**
+   - Abra no navegador: `http://localhost:3000`
+
+## Como Executar Localmente (Desenvolvimento)
+
+1. **Instale as dependências:**
+   ```bash
+   npm install
+   ```
+2. **Configure o endpoint da API:**
+
+   Crie um arquivo `.env.local` na raiz:
+
+   ```code snippet
+   NEXT_PUBLIC_API_URL=http://localhost:3001
+   ```
+
+3. **Inicie o servidor local:**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Acesse no navegador:** `http://localhost:3000`
