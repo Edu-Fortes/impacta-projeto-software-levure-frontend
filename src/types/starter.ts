@@ -1,3 +1,5 @@
+import { Feeding } from "./feeding";
+
 export type StarterStatus = "ACTIVE" | "FRIDGE" | "NEW";
 
 export interface Starter {
@@ -9,11 +11,12 @@ export interface Starter {
   status: StarterStatus;
   createdAt: string;
   updatedAt: string;
+  feedings?: Feeding[];
 }
 
 export type CreateStarterInput = Omit<
   Starter,
-  "id" | "createdAt" | "updatedAt"
+  "id" | "createdAt" | "updatedAt" | "feedings"
 >;
 export type UpdateStarterInput = Partial<CreateStarterInput>;
 
