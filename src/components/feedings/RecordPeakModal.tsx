@@ -30,6 +30,13 @@ interface RecordPeakModalProps {
   onRecordPeak: (feedingId: string, data: RecordPeakInput) => Promise<void>;
 }
 
+const aromaProfileLabels: Record<AromaProfile, string> = {
+  BALANCED: "Equilibrado / Normal",
+  FRUITY: "Frutado / Suave",
+  ACIDIC: "Muito Ácido (Acético)",
+  ALCOHOLIC: "Alcoólico",
+};
+
 export function RecordPeakModal({
   feeding,
   open,
@@ -109,16 +116,30 @@ export function RecordPeakModal({
             <Label htmlFor="aroma">Aroma Observado</Label>
             <Select
               value={aromaProfile}
-              onValueChange={(val: AromaProfile) => setAromaProfile(val)}
+              onValueChange={(val: AromaProfile | null) =>
+                val && setAromaProfile(val)
+              }
             >
               <SelectTrigger id="aroma">
-                <SelectValue />
+                <SelectValue>
+                  {(value: AromaProfile | null) =>
+                    value ? aromaProfileLabels[value] : "Selecione o aroma"
+                  }
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="BALANCED">Equilibrado / Normal</SelectItem>
-                <SelectItem value="FRUITY">Frutado / Suave</SelectItem>
-                <SelectItem value="ACIDIC">Muito Ácido (Acético)</SelectItem>
-                <SelectItem value="ALCOHOLIC">Alcoólico</SelectItem>
+                <SelectItem value="BALANCED">
+                  {aromaProfileLabels.BALANCED}
+                </SelectItem>
+                <SelectItem value="FRUITY">
+                  {aromaProfileLabels.FRUITY}
+                </SelectItem>
+                <SelectItem value="ACIDIC">
+                  {aromaProfileLabels.ACIDIC}
+                </SelectItem>
+                <SelectItem value="ALCOHOLIC">
+                  {aromaProfileLabels.ALCOHOLIC}
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
