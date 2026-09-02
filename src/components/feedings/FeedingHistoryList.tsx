@@ -5,7 +5,13 @@ import { Feeding, RecordPeakInput } from "@/types/feeding";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Droplets, Wheat, Clock, CheckCircle2 } from "lucide-react";
+import {
+  Droplets,
+  Wheat,
+  Clock,
+  CheckCircle2,
+  FishingHook,
+} from "lucide-react";
 import { RecordPeakModal } from "./RecordPeakModal";
 
 interface FeedingHistoryListProps {
@@ -73,6 +79,10 @@ export function FeedingHistoryList({
                       <span>{feeding.ambientTempC}°C</span>
                     </span>
                     <span className="flex items-center gap-1">
+                      <FishingHook className="w-3.5 h-3.5 text-green-600" />
+                      <span>{feeding.starterWeightG}g isca</span>
+                    </span>
+                    <span className="flex items-center gap-1">
                       <Droplets className="w-3.5 h-3.5 text-sky-600" />
                       <span>{feeding.waterWeightG}g água</span>
                     </span>
@@ -83,7 +93,7 @@ export function FeedingHistoryList({
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-t-0 pt-3 sm:pt-0">
+                {/* <div className="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-t-0 pt-3 sm:pt-0">
                   <div className="text-right">
                     <span className="block text-[10px] uppercase font-semibold text-muted-foreground">
                       {hasRealPeak ? "Pico Real Observado" : "Pico Previsto"}
@@ -111,19 +121,19 @@ export function FeedingHistoryList({
                       Marcar Pico
                     </Button>
                   )}
-                </div>
+                </div> */}
               </CardContent>
             </Card>
           );
         })}
       </div>
 
-      <RecordPeakModal
+      {/* <RecordPeakModal
         feeding={selectedFeedingForPeak}
         open={!!selectedFeedingForPeak}
         onOpenChange={(open) => !open && setSelectedFeedingForPeak(null)}
         onRecordPeak={onRecordPeak}
-      />
+      /> */}
     </>
   );
 }

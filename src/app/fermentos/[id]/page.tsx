@@ -187,13 +187,13 @@ export default function DetalheFermentoPage() {
             >
               Histórico ({starter.feedings?.length || 0})
             </TabsTrigger>
-            <TabsTrigger
+            {/* <TabsTrigger
               value="ia"
               className="text-xs sm:text-sm font-medium gap-1.5 text-muted-foreground"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               Saúde & IA (Sprint 4)
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
 
           <TabsContent value="alimentar" className="outline-none">
@@ -210,7 +210,7 @@ export default function DetalheFermentoPage() {
             />
           </TabsContent>
 
-          <TabsContent value="ia" className="outline-none">
+          {/* <TabsContent value="ia" className="outline-none">
             <div className="text-center py-16 border rounded-xl bg-card/50 space-y-2">
               <Sparkles className="w-8 h-8 text-amber-500 mx-auto" />
               <h3 className="text-base font-semibold">
@@ -221,7 +221,7 @@ export default function DetalheFermentoPage() {
                 o histórico de picos e gerar orientações com IA.
               </p>
             </div>
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </main>
 

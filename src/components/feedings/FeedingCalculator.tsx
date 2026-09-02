@@ -7,7 +7,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
-import { Wheat, Droplets, Clock, Sparkles, Scale } from "lucide-react";
+import {
+  Wheat,
+  Droplets,
+  Clock,
+  Sparkles,
+  Scale,
+  FishingHook,
+} from "lucide-react";
 import { toast } from "sonner";
 
 interface FeedingCalculatorProps {
@@ -316,7 +323,7 @@ export function FeedingCalculator({
 
             <div className="grid grid-cols-3 gap-2">
               <div className="border rounded-xl p-3 bg-muted/20 text-center flex flex-col items-center justify-center">
-                <Wheat className="w-4 h-4 text-primary mb-1" />
+                <FishingHook className="w-4 h-4 text-primary mb-1" />
                 <span className="text-xl font-bold text-foreground">
                   {composition.starterG}g
                 </span>
@@ -350,7 +357,7 @@ export function FeedingCalculator({
         </Card>
 
         {/* Estimativa de Pico */}
-        <Card className="border-border/80 shadow-sm bg-card">
+        {/* <Card className="border-border/80 shadow-sm bg-card">
           <CardContent className="p-5 space-y-4">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               <Clock className="w-3.5 h-3.5 text-primary" />
@@ -393,8 +400,17 @@ export function FeedingCalculator({
               <Sparkles className="w-4 h-4" />
               {isSubmitting ? "Registrando..." : "Registrar alimentação"}
             </Button>
-          </CardContent>
-        </Card>
+            </CardContent>
+            </Card> */}
+        <Button
+          type="button"
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          className="w-full gap-2 font-semibold shadow-sm"
+          size="lg"
+        >
+          {isSubmitting ? "Registrando..." : "Registrar alimentação"}
+        </Button>
       </div>
     </div>
   );
