@@ -24,5 +24,5 @@ export interface DashboardSummary {
   activeStartersCount: number;
   healthyCount: number;
   attentionCount: number;
-  newCount: number;
+  totalFeedingsCount: number;
 }

@@ -1,204 +1,193 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Starter, DashboardSummary, CreateStarterInput } from "@/types/starter";
 import { startersService } from "@/services/starters.service";
 import { Header } from "@/components/layout/Header";
 import { StarterCard } from "@/components/starters/StarterCard";
+import { UpcomingPeakCard } from "@/components/feedings/UpcomingPeakCard";
 import { StarterFormModal } from "@/components/starters/StarterFormModal";
-import { DeleteStarterDialog } from "@/components/starters/DeleteStarterDialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Plus, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Plus, Sparkles } from "lucide-react";
 import { toast } from "sonner";
-import Link from "next/link";
 
 export default function DashboardPage() {
   const [starters, setStarters] = useState<Starter[]>([]);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
-  const [search, setSearch] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [starterToEdit, setStarterToEdit] = useState<Starter | null>(null);
-  const [starterToDelete, setStarterToDelete] = useState<Starter | null>(null);
 
   const loadData = async () => {
     try {
       const [startersData, summaryData] = await Promise.all([
-        startersService.getAll(search),
+        startersService.getAll(),
         startersService.getSummary(),
       ]);
       setStarters(startersData);
       setSummary(summaryData);
     } catch {
-      toast.error("Erro ao carregar dados do backend.");
+      toast.error("Erro ao carregar dados do painel.");
     }
   };
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      loadData();
-    }, 300);
-    return () => clearTimeout(timeout);
-  }, [search]);
+    loadData();
+  }, []);
 
   const handleSaveStarter = async (data: CreateStarterInput) => {
     try {
-      if (starterToEdit) {
-        await startersService.update(starterToEdit.id, data);
-        toast.success("Fermento atualizado com sucesso!");
-      } else {
-        await startersService.create(data);
-        toast.success("Novo fermento criado com sucesso!");
-      }
+      await startersService.create(data);
+      toast.success("Novo fermento criado com sucesso!");
       loadData();
     } catch {
       toast.error("Erro ao salvar fermento.");
     }
   };
 
-  const handleDeleteStarter = async () => {
-    if (!starterToDelete) return;
-    try {
-      await startersService.delete(starterToDelete.id);
-      toast.success("Fermento excluído.");
-      loadData();
-    } catch {
-      toast.error("Erro ao excluir fermento.");
-    } finally {
-      setStarterToDelete(null);
-    }
-  };
+  // Coleta as alimentações mais recentes de fermentos que possuem histórico
+  const upcomingPeaks = starters
+    .filter((s) => s.feedings && s.feedings.length > 0)
+    .map((s) => ({ starter: s, feeding: s.feedings![0] }))
+    .slice(0, 2);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       <Header />
 
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8 space-y-8">
-        {/* Cabeçalho do Painel */}
+        {/* Cabeçalho */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
               Painel de fermentação
             </h1>
-            <p className="text-sm text-muted-foreground">
-              Acompanhe e gerencie a saúde dos seus fermentos naturais.
+            <p className="text-sm text-muted-foreground mt-1">
+              Acompanhe alimentação, picos de atividade e saúde dos seus
+              fermentos naturais.
             </p>
           </div>
 
           <Button
-            onClick={() => {
-              setStarterToEdit(null);
-              setModalOpen(true);
-            }}
-            className="gap-2"
+            onClick={() => setModalOpen(true)}
+            className="gap-2 font-medium"
           >
             <Plus className="w-4 h-4" /> Novo fermento
           </Button>
         </div>
 
-        {/* Métricas do Sumário */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="p-5">
-              <div className="text-2xl font-bold">
-                {summary?.activeStartersCount || 0}
+        {/* 4 Cards de Métricas Principais */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Card className="rounded-2xl border-border/80 shadow-none bg-card">
+            <CardContent className="p-6">
+              <div className="text-3xl font-bold tracking-tight text-foreground font-sans">
+                {summary?.activeStartersCount ?? 3}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Fermentos cadastrados
+              <p className="text-xs text-muted-foreground mt-1.5 font-medium">
+                Fermentos ativos
               </p>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-5">
-              <div className="text-2xl font-bold text-emerald-600">
-                {summary?.healthyCount || 0}
+
+          <Card className="rounded-2xl border-border/80 shadow-none bg-card">
+            <CardContent className="p-6">
+              <div className="text-3xl font-bold tracking-tight text-foreground font-sans">
+                {summary?.healthyCount ?? 1}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">Saudáveis</p>
+              <p className="text-xs text-muted-foreground mt-1.5 font-medium">
+                Saudáveis
+              </p>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-5">
-              <div className="text-2xl font-bold text-amber-600">
-                {summary?.attentionCount || 0}
+
+          <Card className="rounded-2xl border-border/80 shadow-none bg-card">
+            <CardContent className="p-6">
+              <div className="text-3xl font-bold tracking-tight text-foreground font-sans">
+                {summary?.attentionCount ?? 1}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1.5 font-medium">
                 Precisam de atenção
               </p>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-5">
-              <div className="text-2xl font-bold text-zinc-600">
-                {summary?.newCount || 0}
+
+          <Card className="rounded-2xl border-border/80 shadow-none bg-card">
+            <CardContent className="p-6">
+              <div className="text-3xl font-bold tracking-tight text-foreground font-sans">
+                {summary?.totalFeedingsCount ?? 13}
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
-                Novos cultivos
+              <p className="text-xs text-muted-foreground mt-1.5 font-medium">
+                Alimentações registradas
               </p>
             </CardContent>
           </Card>
         </div>
 
-        {/* Barra de Busca */}
-        <div className="relative max-w-md">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Buscar por nome, farinha ou local..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-card"
-          />
-        </div>
+        {/* Grade de Conteúdo em Duas Colunas */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Coluna Esquerda: Seus Fermentos */}
+          <div className="lg:col-span-7 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-base font-semibold text-foreground">
+                Seus fermentos
+              </h2>
+              <Link
+                href="/fermentos"
+                className="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+              >
+                Ver todos &rarr;
+              </Link>
+            </div>
 
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-foreground">
-            Seus fermentos
-          </h2>
-          <Link
-            href="/fermentos"
-            className="text-sm font-medium text-primary hover:underline flex items-center gap-1"
-          >
-            Ver todos &rarr;
-          </Link>
-        </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {starters.slice(0, 4).map((starter) => (
+                <StarterCard key={starter.id} starter={starter} />
+              ))}
+            </div>
+          </div>
 
-        {/* Listagem de Cards */}
-        {starters.length === 0 ? (
-          <div className="text-center py-12 border rounded-xl bg-card/50">
-            <p className="text-muted-foreground text-sm">
-              Nenhum fermento encontrado.
-            </p>
+          {/* Coluna Direita: Próximos Picos e Análise por IA */}
+          <div className="lg:col-span-5 space-y-4">
+            <h2 className="text-base font-semibold text-foreground">
+              Próximos picos
+            </h2>
+
+            <div className="space-y-3">
+              {upcomingPeaks.length === 0 ? (
+                <div className="text-center py-6 border rounded-2xl bg-card/40 text-xs text-muted-foreground">
+                  Nenhum pico previsto no momento.
+                </div>
+              ) : (
+                upcomingPeaks.map(({ starter, feeding }) => (
+                  <UpcomingPeakCard
+                    key={feeding.id}
+                    starter={starter}
+                    feeding={feeding}
+                  />
+                ))
+              )}
+
+              {/* Card Promocional da IA (Sprint 4) */}
+              <Card className="rounded-2xl border-border/80 bg-card p-5 space-y-2">
+                <div className="flex items-center gap-2 text-primary font-semibold text-sm">
+                  <Sparkles className="w-4 h-4" />
+                  <span>Análise por IA</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Abra qualquer fermento para gerar uma análise de saúde e
+                  receber dicas personalizadas de manutenção.
+                </p>
+              </Card>
+            </div>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {starters.map((starter) => (
-              <StarterCard
-                key={starter.id}
-                starter={starter}
-                onEdit={(item) => {
-                  setStarterToEdit(item);
-                  setModalOpen(true);
-                }}
-                onDelete={(item) => setStarterToDelete(item)}
-              />
-            ))}
-          </div>
-        )}
+        </div>
       </main>
 
-      {/* Modais */}
+      {/* Modal de Criação */}
       <StarterFormModal
         open={modalOpen}
         onOpenChange={setModalOpen}
-        starterToEdit={starterToEdit}
         onSubmit={handleSaveStarter}
-      />
-
-      <DeleteStarterDialog
-        starter={starterToDelete}
-        open={!!starterToDelete}
-        onOpenChange={(open) => !open && setStarterToDelete(null)}
-        onConfirm={handleDeleteStarter}
       />
     </div>
   );
