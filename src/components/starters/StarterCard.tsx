@@ -1,3 +1,6 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { Starter } from "@/types/starter";
 import { StarterStatusBadge } from "./StarterStatusBadge";
 import { MapPin, Wheat, MoreVertical, Edit2, Trash2 } from "lucide-react";
@@ -17,16 +20,21 @@ interface StarterCardProps {
 }
 
 export function StarterCard({ starter, onEdit, onDelete }: StarterCardProps) {
+  const router = useRouter();
+
   return (
-    <Card className="hover:shadow-md transition-shadow border-border/80">
+    <Card
+      onClick={() => router.push(`/fermentos/${starter.id}`)}
+      className="hover:shadow-md transition-all border-border/80 cursor-pointer hover:border-primary/40 group"
+    >
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
               <Wheat className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-semibold text-base text-foreground leading-snug">
+              <h3 className="font-semibold text-base text-foreground leading-snug group-hover:text-primary transition-colors">
                 {starter.name}
               </h3>
               <p className="text-sm text-muted-foreground">
@@ -35,7 +43,10 @@ export function StarterCard({ starter, onEdit, onDelete }: StarterCardProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2"
+            onClick={(e) => e.stopPropagation()}
+          >
             <StarterStatusBadge status={starter.status} />
             <DropdownMenu>
               <DropdownMenuTrigger
