@@ -4,8 +4,21 @@ import { useRouter } from "next/navigation";
 import { Starter } from "@/types/starter";
 import { StarterStatusBadge } from "./StarterStatusBadge";
 import { formatLastFeeding } from "@/lib/utils";
-import { MapPin, Wheat } from "lucide-react";
+import { Edit2, MapPin, MoreVertical, Trash2, Wheat } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+
+interface StarterCardProps {
+  starter: Starter;
+  onEdit: (starter: Starter) => void;
+  onDelete: (starter: Starter) => void;
+}
 
 // Paleta dos ícones conforme farinha
 const FLOUR_PALETTE: Record<string, { bg: string; text: string }> = {
@@ -14,7 +27,7 @@ const FLOUR_PALETTE: Record<string, { bg: string; text: string }> = {
   "Trigo integral": { bg: "bg-[#EBF5FA]", text: "text-[#0284C7]" },
 };
 
-export function StarterCard({ starter }: { starter: Starter }) {
+export function StarterCard({ starter, onEdit, onDelete }: StarterCardProps) {
   const router = useRouter();
   const theme = FLOUR_PALETTE[starter.flourType] || {
     bg: "bg-muted/40",
@@ -52,7 +65,39 @@ export function StarterCard({ starter }: { starter: Starter }) {
             </div>
           </div>
 
-          <StarterStatusBadge status={starter.status} />
+          <div
+            className="flex items-center gap-2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <StarterStatusBadge status={starter.status} />
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground"
+                  >
+                    <MoreVertical className="w-4 h-4" />
+                  </Button>
+                }
+              />
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={() => onEdit(starter)}
+                  className="gap-2"
+                >
+                  <Edit2 className="w-4 h-4" /> Editar
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => onDelete(starter)}
+                  className="gap-2 text-destructive focus:text-destructive"
+                >
+                  <Trash2 className="w-4 h-4" /> Excluir
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
 
         <div className="mt-6 pt-3.5 border-t border-border/50 flex items-center justify-between text-xs text-muted-foreground">

@@ -12,10 +12,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { DeleteStarterDialog } from "@/components/starters/DeleteStarterDialog";
 
 export default function DashboardPage() {
   const [starters, setStarters] = useState<Starter[]>([]);
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
+  const [starterToEdit, setStarterToEdit] = useState<Starter | null>(null);
+  const [starterToDelete, setStarterToDelete] = useState<Starter | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
   const loadData = async () => {
@@ -37,11 +40,29 @@ export default function DashboardPage() {
 
   const handleSaveStarter = async (data: CreateStarterInput) => {
     try {
-      await startersService.create(data);
-      toast.success("Novo fermento criado com sucesso!");
+      if (starterToEdit) {
+        await startersService.update(starterToEdit.id, data);
+        toast.success("Fermento atualizado com sucesso!");
+      } else {
+        await startersService.create(data);
+        toast.success("Novo fermento criado com sucesso!");
+      }
       loadData();
     } catch {
       toast.error("Erro ao salvar fermento.");
+    }
+  };
+
+  const handleDeleteStarter = async () => {
+    if (!starterToDelete) return;
+    try {
+      await startersService.delete(starterToDelete.id);
+      toast.success("Fermento excluído.");
+      loadData();
+    } catch {
+      toast.error("Erro ao excluir fermento.");
+    } finally {
+      setStarterToDelete(null);
     }
   };
 
@@ -126,7 +147,8 @@ export default function DashboardPage() {
         {/* Grade de Conteúdo em Duas Colunas */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Coluna Esquerda: Seus Fermentos */}
-          <div className="lg:col-span-7 space-y-4">
+          {/* <div className="lg:col-span-7 space-y-4"> */}
+          <div className="lg:col-span-full space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-base font-semibold text-foreground">
                 Seus fermentos
@@ -139,15 +161,24 @@ export default function DashboardPage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {starters.slice(0, 4).map((starter) => (
-                <StarterCard key={starter.id} starter={starter} />
+                <StarterCard
+                  key={starter.id}
+                  starter={starter}
+                  onEdit={(item) => {
+                    setStarterToEdit(item);
+                    setModalOpen(true);
+                  }}
+                  onDelete={(item) => setStarterToDelete(item)}
+                />
               ))}
             </div>
           </div>
 
           {/* Coluna Direita: Próximos Picos e Análise por IA */}
-          <div className="lg:col-span-5 space-y-4">
+          {/* <div className="lg:col-span-5 space-y-4">
             <h2 className="text-base font-semibold text-foreground">
               Próximos picos
             </h2>
@@ -165,10 +196,10 @@ export default function DashboardPage() {
                     feeding={feeding}
                   />
                 ))
-              )}
+              )} */}
 
-              {/* Card Promocional da IA (Sprint 4) */}
-              <Card className="rounded-2xl border-border/80 bg-card p-5 space-y-2">
+          {/* Card Promocional da IA (Sprint 4) */}
+          {/* <Card className="rounded-2xl border-border/80 bg-card p-5 space-y-2">
                 <div className="flex items-center gap-2 text-primary font-semibold text-sm">
                   <Sparkles className="w-4 h-4" />
                   <span>Análise por IA</span>
@@ -179,7 +210,7 @@ export default function DashboardPage() {
                 </p>
               </Card>
             </div>
-          </div>
+          </div> */}
         </div>
       </main>
 
@@ -187,7 +218,15 @@ export default function DashboardPage() {
       <StarterFormModal
         open={modalOpen}
         onOpenChange={setModalOpen}
+        starterToEdit={starterToEdit}
         onSubmit={handleSaveStarter}
+      />
+
+      <DeleteStarterDialog
+        starter={starterToDelete}
+        open={!!starterToDelete}
+        onOpenChange={(open) => !open && setStarterToDelete(null)}
+        onConfirm={handleDeleteStarter}
       />
     </div>
   );
