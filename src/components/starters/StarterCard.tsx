@@ -38,7 +38,7 @@ export function StarterCard({ starter, onEdit, onDelete }: StarterCardProps) {
   const lastFeedingDate =
     starter.feedings && starter.feedings.length > 0
       ? starter.feedings[0].fedAt
-      : starter.updatedAt;
+      : starter.createdAt;
 
   const formattedTime = formatLastFeeding(lastFeedingDate).toLowerCase();
 
@@ -106,12 +106,21 @@ export function StarterCard({ starter, onEdit, onDelete }: StarterCardProps) {
             <span>{starter.location}</span>
           </div>
 
-          <div>
-            <span>Alimentado </span>
-            <span className="font-mono text-foreground font-medium">
-              {formattedTime}
-            </span>
-          </div>
+          {!starter.feedings || starter.feedings.length === 0 ? (
+            <div className="flex items-center gap-1.5">
+              <span>Criado </span>
+              <span className="font-mono text-foreground font-medium">
+                {formattedTime}
+              </span>
+            </div>
+          ) : (
+            <div>
+              <span>Alimentado </span>
+              <span className="font-mono text-foreground font-medium">
+                {formattedTime}
+              </span>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
