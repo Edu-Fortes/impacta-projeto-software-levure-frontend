@@ -13,8 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Plus, Search, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { DeleteStarterDialog } from "@/components/starters/DeleteStarterDialog";
-import { StatsCard } from "@/components/dashboard/StatsCard";
-import { statsCardData } from "@/components/dashboard/statsCardData";
+import { StatsCard } from "@/components/layout/StatsCard";
+import { statsCardData } from "@/components/layout/statsCardData";
 import { Input } from "@/components/ui/input";
 
 export default function DashboardPage() {
