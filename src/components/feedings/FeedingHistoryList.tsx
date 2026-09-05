@@ -11,6 +11,7 @@ import {
   Clock,
   CheckCircle2,
   FishingHook,
+  Thermometer,
 } from "lucide-react";
 import { RecordPeakModal } from "./RecordPeakModal";
 
@@ -76,6 +77,7 @@ export function FeedingHistoryList({
 
                   <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
+                      <Thermometer className="w-3.5 h-3.5 text-red-600" />
                       <span>{feeding.ambientTempC}°C</span>
                     </span>
                     <span className="flex items-center gap-1">

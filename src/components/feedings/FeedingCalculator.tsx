@@ -249,7 +249,7 @@ export function FeedingCalculator({
               min={1}
               value={inputValue || ""}
               onChange={(e) => setInputValue(Number(e.target.value))}
-              className="pl-10 text-base bg-card font-medium"
+              className="pl-10 text-base bg-card font-medium font-mono"
             />
           </div>
           <p className="text-xs text-muted-foreground">
@@ -274,7 +274,7 @@ export function FeedingCalculator({
                 type="button"
                 variant={selectedRatio === ratio ? "default" : "outline"}
                 onClick={() => setSelectedRatio(ratio)}
-                className={`text-xs sm:text-sm font-medium transition-all ${
+                className={`text-xs sm:text-sm font-medium font-mono transition-all ${
                   selectedRatio === ratio
                     ? "shadow-sm"
                     : "bg-card text-muted-foreground hover:text-foreground"
@@ -295,7 +295,7 @@ export function FeedingCalculator({
             <span className="text-sm font-semibold text-foreground">
               Temperatura ambiente
             </span>
-            <span className="text-sm font-bold text-foreground bg-muted/60 px-2.5 py-0.5 rounded-md border">
+            <span className="text-sm font-bold font-mono text-foreground bg-muted/60 px-2.5 py-0.5 rounded-md border">
               {ambientTemp}°C
             </span>
           </div>
@@ -324,7 +324,7 @@ export function FeedingCalculator({
             <div className="grid grid-cols-3 gap-2">
               <div className="border rounded-xl p-3 bg-muted/20 text-center flex flex-col items-center justify-center">
                 <FishingHook className="w-4 h-4 text-primary mb-1" />
-                <span className="text-xl font-bold text-foreground">
+                <span className="text-xl font-bold font-mono text-foreground">
                   {composition.starterG}g
                 </span>
                 <span className="text-xs text-muted-foreground">Isca</span>
@@ -332,7 +332,7 @@ export function FeedingCalculator({
 
               <div className="border rounded-xl p-3 bg-muted/20 text-center flex flex-col items-center justify-center">
                 <Droplets className="w-4 h-4 text-sky-600 mb-1" />
-                <span className="text-xl font-bold text-foreground">
+                <span className="text-xl font-bold font-mono text-foreground">
                   {composition.waterG}g
                 </span>
                 <span className="text-xs text-muted-foreground">Água</span>
@@ -340,7 +340,7 @@ export function FeedingCalculator({
 
               <div className="border rounded-xl p-3 bg-muted/20 text-center flex flex-col items-center justify-center">
                 <Wheat className="w-4 h-4 text-amber-600 mb-1" />
-                <span className="text-xl font-bold text-foreground">
+                <span className="text-xl font-bold font-mono text-foreground">
                   {composition.flourG}g
                 </span>
                 <span className="text-xs text-muted-foreground">Farinha</span>
@@ -349,7 +349,7 @@ export function FeedingCalculator({
 
             <div className="pt-2 border-t flex items-center justify-between text-xs text-muted-foreground">
               <span>Peso total da mistura</span>
-              <span className="font-semibold text-foreground text-sm">
+              <span className="font-semibold font-mono text-foreground text-sm">
                 {composition.totalG}g
               </span>
             </div>

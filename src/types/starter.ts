@@ -23,6 +23,6 @@ export type UpdateStarterInput = Partial<CreateStarterInput>;
 export interface DashboardSummary {
   activeStartersCount: number;
   healthyCount: number;
-  attentionCount: number;
-  newCount: number;
+  fridgeCount: number;
+  totalFeedingsCount: number;
 }
