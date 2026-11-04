@@ -357,7 +357,7 @@ export function FeedingCalculator({
         </Card>
 
         {/* Estimativa de Pico */}
-        {/* <Card className="border-border/80 shadow-sm bg-card">
+        <Card className="border-border/80 shadow-sm bg-card">
           <CardContent className="p-5 space-y-4">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               <Clock className="w-3.5 h-3.5 text-primary" />
@@ -400,17 +400,8 @@ export function FeedingCalculator({
               <Sparkles className="w-4 h-4" />
               {isSubmitting ? "Registrando..." : "Registrar alimentação"}
             </Button>
-            </CardContent>
-            </Card> */}
-        <Button
-          type="button"
-          onClick={handleSubmit}
-          disabled={isSubmitting}
-          className="w-full gap-2 font-semibold shadow-sm"
-          size="lg"
-        >
-          {isSubmitting ? "Registrando..." : "Registrar alimentação"}
-        </Button>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
