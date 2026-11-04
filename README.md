@@ -33,6 +33,15 @@ Interface moderna e responsiva para acompanhamento da saúde, cálculos de alime
 - **Refatoração da Listagem de Fermentos (`/fermentos`):** Substituição do grid por **Tabela de Dados**, com colunas de farinha, local, status e tempo relativo da última alimentação (`Hoje`, `Ontem`, `Há X dias`).
 - **Aprimoramentos no Dashboard:** Atualização do card de contagem total de alimentações e rodapé dos cards de cultivo com data de alimentação em tipografia monospace.
 
+### Sprint 3: Registro & Estimativa Adaptativa de Pico
+
+- **Estimador Dinâmico de Pico:** Cálculo em tempo real da duração até o pico e do horário previsto, reagindo instantaneamente a alterações de proporção e temperatura.
+- **Algoritmo Adaptativo (Auto-Calibração):**
+  - _Modo Teórico:_ Utiliza referências biológicas padrão em fermentos novos (< 5 registros).
+  - _Modo Calibrado:_ Normaliza a média de tempo dos picos reais anteriores para 24°C e personaliza as previsões (exibindo selo de alta confiança).
+- **Modal de Registro de Pico Real:** Permite marcar o horário exato em que o cultivo atingiu o ápice, o multiplicador de crescimento do volume (ex: 2.5x, 3.0x) e o perfil aromático.
+- **Seção de Próximos Picos no Dashboard:** Cards na coluna lateral do painel exibindo o status de fermentação (`Subindo` ou `Pico atingido`), temperatura e horário previsto em fonte monospace.
+
 ---
 
 ## Como Executar com Docker (Recomendado para Avaliação)

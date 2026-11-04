@@ -95,7 +95,7 @@ export function FeedingHistoryList({
                   </div>
                 </div>
 
-                {/* <div className="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-t-0 pt-3 sm:pt-0">
+                <div className="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-t-0 pt-3 sm:pt-0">
                   <div className="text-right">
                     <span className="block text-[10px] uppercase font-semibold text-muted-foreground">
                       {hasRealPeak ? "Pico Real Observado" : "Pico Previsto"}
@@ -123,19 +123,19 @@ export function FeedingHistoryList({
                       Marcar Pico
                     </Button>
                   )}
-                </div> */}
+                </div>
               </CardContent>
             </Card>
           );
         })}
       </div>
 
-      {/* <RecordPeakModal
+      <RecordPeakModal
         feeding={selectedFeedingForPeak}
         open={!!selectedFeedingForPeak}
         onOpenChange={(open) => !open && setSelectedFeedingForPeak(null)}
         onRecordPeak={onRecordPeak}
-      /> */}
+      />
     </>
   );
 }

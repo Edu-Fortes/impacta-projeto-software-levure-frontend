@@ -71,10 +71,10 @@ export default function DashboardPage() {
   };
 
   // Coleta as alimentações mais recentes de fermentos que possuem histórico
-  // const upcomingPeaks = starters
-  //   .filter((s) => s.feedings && s.feedings.length > 0)
-  //   .map((s) => ({ starter: s, feeding: s.feedings![0] }))
-  //   .slice(0, 2);
+  const upcomingPeaks = starters
+    .filter((s) => s.feedings && s.feedings.length > 0)
+    .map((s) => ({ starter: s, feeding: s.feedings![0] }))
+    .slice(0, 2);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -127,8 +127,7 @@ export default function DashboardPage() {
         {/* Grade de Conteúdo em Duas Colunas */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Coluna Esquerda: Seus Fermentos */}
-          {/* <div className="lg:col-span-7 space-y-4"> */}
-          <div className="lg:col-span-full space-y-4">
+          <div className="lg:col-span-7 space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-base font-semibold text-foreground">
                 Seus fermentos
@@ -149,8 +148,7 @@ export default function DashboardPage() {
               </div>
             ) : (
               <>
-                {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {starters.slice(0, 4).map((starter) => (
                     <StarterCard
                       key={starter.id}
@@ -168,7 +166,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Coluna Direita: Próximos Picos e Análise por IA */}
-          {/* <div className="lg:col-span-5 space-y-4">
+          <div className="lg:col-span-5 space-y-4">
             <h2 className="text-base font-semibold text-foreground">
               Próximos picos
             </h2>
@@ -186,10 +184,10 @@ export default function DashboardPage() {
                     feeding={feeding}
                   />
                 ))
-              )} */}
+              )}
 
-          {/* Card Promocional da IA (Sprint 4) */}
-          {/* <Card className="rounded-2xl border-border/80 bg-card p-5 space-y-2">
+              {/* Card Promocional da IA (Sprint 4) */}
+              {/* <Card className="rounded-2xl border-border/80 bg-card p-5 space-y-2">
                 <div className="flex items-center gap-2 text-primary font-semibold text-sm">
                   <Sparkles className="w-4 h-4" />
                   <span>Análise por IA</span>
@@ -198,9 +196,9 @@ export default function DashboardPage() {
                   Abra qualquer fermento para gerar uma análise de saúde e
                   receber dicas personalizadas de manutenção.
                 </p>
-              </Card>
+              </Card> */}
             </div>
-          </div> */}
+          </div>
         </div>
       </main>
 
