@@ -12,6 +12,9 @@ import { StarterFormModal } from "@/components/starters/StarterFormModal";
 import { DeleteStarterDialog } from "@/components/starters/DeleteStarterDialog";
 import { FeedingCalculator } from "@/components/feedings/FeedingCalculator";
 import { FeedingHistoryList } from "@/components/feedings/FeedingHistoryList";
+import { HealthAnalysisTab } from "@/components/starters/HealthAnalysisTab";
+import { aiService } from "@/services/ai.service";
+import { HealthAnalysis } from "@/types/ai";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +24,7 @@ import {
   ArrowLeft,
   Edit2,
   Trash2,
+  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -31,13 +35,21 @@ export default function DetalheFermentoPage() {
 
   const [starter, setStarter] = useState<Starter | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("alimentar");
+  const [latestAnalysis, setLatestAnalysis] = useState<HealthAnalysis | null>(
+    null,
+  );
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const loadStarter = async () => {
     try {
-      const data = await startersService.getById(starterId);
-      setStarter(data);
+      const [starterData, analysisData] = await Promise.all([
+        startersService.getById(starterId),
+        aiService.getLatestAnalysis(starterId),
+      ]);
+      setStarter(starterData);
+      setLatestAnalysis(analysisData);
     } catch {
       toast.error("Fermento não encontrado.");
       router.push("/fermentos");
@@ -186,7 +198,11 @@ export default function DetalheFermentoPage() {
         </div>
 
         {/* Abas */}
-        <Tabs defaultValue="alimentar" className="space-y-6">
+        {/* <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
           <TabsList className="bg-muted/60 p-1">
             <TabsTrigger
               value="alimentar"
@@ -200,13 +216,13 @@ export default function DetalheFermentoPage() {
             >
               Histórico ({starter.feedings?.length || 0})
             </TabsTrigger>
-            {/* <TabsTrigger
+            <TabsTrigger
               value="ia"
               className="text-xs sm:text-sm font-medium gap-1.5 text-muted-foreground"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              Saúde & IA (Sprint 4)
-            </TabsTrigger> */}
+              Saúde & IA
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="alimentar" className="outline-none">
@@ -223,18 +239,68 @@ export default function DetalheFermentoPage() {
             />
           </TabsContent>
 
-          {/* <TabsContent value="ia" className="outline-none">
-            <div className="text-center py-16 border rounded-xl bg-card/50 space-y-2">
-              <Sparkles className="w-8 h-8 text-amber-500 mx-auto" />
-              <h3 className="text-base font-semibold">
-                Diagnóstico Inteligente de Saúde
-              </h3>
-              <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                Esta funcionalidade será ativada na Sprint 4 para analisar todo
-                o histórico de picos e gerar orientações com IA.
-              </p>
-            </div>
-          </TabsContent> */}
+          <TabsContent value="ia" className="outline-none">
+            <HealthAnalysisTab
+              starterId={starter.id}
+              initialAnalysis={latestAnalysis}
+              feedingsCount={starter.feedings?.length || 0}
+              onApplyRecommendedRatio={(ratio) => {
+                setActiveTab("alimentar");
+              }}
+            />
+          </TabsContent>
+        </Tabs> */}
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="space-y-6"
+        >
+          <TabsList className="bg-muted/60 p-1">
+            <TabsTrigger
+              value="alimentar"
+              className="text-xs sm:text-sm font-medium"
+            >
+              Alimentar
+            </TabsTrigger>
+            <TabsTrigger
+              value="historico"
+              className="text-xs sm:text-sm font-medium"
+            >
+              Histórico ({starter.feedings?.length || 0})
+            </TabsTrigger>
+            <TabsTrigger
+              value="ia"
+              className="text-xs sm:text-sm font-medium gap-1.5"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              Saúde & IA
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="alimentar" className="outline-none">
+            <FeedingCalculator
+              starter={starter}
+              onFeedingCreated={handleCreateFeeding}
+            />
+          </TabsContent>
+
+          <TabsContent value="historico" className="outline-none">
+            <FeedingHistoryList
+              feedings={starter.feedings || []}
+              onRecordPeak={handleRecordPeak}
+            />
+          </TabsContent>
+
+          <TabsContent value="ia" className="outline-none">
+            <HealthAnalysisTab
+              starterId={starter.id}
+              initialAnalysis={latestAnalysis}
+              feedingsCount={starter.feedings?.length || 0}
+              onApplyRecommendedRatio={(ratio) => {
+                setActiveTab("alimentar");
+              }}
+            />
+          </TabsContent>
         </Tabs>
       </main>
 
