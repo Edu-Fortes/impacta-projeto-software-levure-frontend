@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Wheat, LayoutDashboard, UtensilsCrossed } from "lucide-react";
+import { Wheat, LayoutDashboard } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 

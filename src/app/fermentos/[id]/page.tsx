@@ -21,7 +21,6 @@ import {
   ArrowLeft,
   Edit2,
   Trash2,
-  Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -48,8 +47,22 @@ export default function DetalheFermentoPage() {
   };
 
   useEffect(() => {
-    if (starterId) loadStarter();
-  }, [starterId]);
+    if (!starterId) return;
+
+    const load = async () => {
+      try {
+        const data = await startersService.getById(starterId);
+        setStarter(data);
+      } catch {
+        toast.error("Fermento não encontrado.");
+        router.push("/fermentos");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void load();
+  }, [router, starterId]);
 
   const handleUpdateStarter = async (data: CreateStarterInput) => {
     if (!starter) return;
@@ -226,6 +239,7 @@ export default function DetalheFermentoPage() {
       </main>
 
       <StarterFormModal
+        key={`${isEditModalOpen}-${starter?.id ?? "new"}`}
         open={isEditModalOpen}
         onOpenChange={setIsEditModalOpen}
         starterToEdit={starter}

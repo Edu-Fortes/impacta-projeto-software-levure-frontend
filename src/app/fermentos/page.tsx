@@ -53,8 +53,13 @@ export default function FermentosPage() {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      loadStarters();
+    const timer = setTimeout(async () => {
+      try {
+        const data = await startersService.getAll(search);
+        setStarters(data);
+      } catch {
+        toast.error("Erro ao carregar a lista de fermentos.");
+      }
     }, 300);
     return () => clearTimeout(timer);
   }, [search]);
@@ -204,6 +209,7 @@ export default function FermentosPage() {
 
       {/* Modal de Criação */}
       <StarterFormModal
+        key={`${modalOpen}-new`}
         open={modalOpen}
         onOpenChange={setModalOpen}
         onSubmit={handleSaveStarter}

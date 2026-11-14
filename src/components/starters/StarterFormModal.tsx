@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Starter, CreateStarterInput, StarterStatus } from "@/types/starter";
 import {
   Dialog,
@@ -41,28 +41,18 @@ export function StarterFormModal({
   starterToEdit,
   onSubmit,
 }: StarterFormModalProps) {
-  const [name, setName] = useState("");
-  const [flourType, setFlourType] = useState("Trigo branco");
-  const [location, setLocation] = useState("");
-  const [notes, setNotes] = useState("");
-  const [status, setStatus] = useState<StarterStatus>("NEW");
+  const [name, setName] = useState(() => starterToEdit?.name ?? "");
+  const [flourType, setFlourType] = useState(
+    () => starterToEdit?.flourType ?? "Trigo branco",
+  );
+  const [location, setLocation] = useState(
+    () => starterToEdit?.location ?? "",
+  );
+  const [notes, setNotes] = useState(() => starterToEdit?.notes ?? "");
+  const [status, setStatus] = useState<StarterStatus>(
+    () => starterToEdit?.status ?? "NEW",
+  );
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (starterToEdit) {
-      setName(starterToEdit.name);
-      setFlourType(starterToEdit.flourType);
-      setLocation(starterToEdit.location);
-      setNotes(starterToEdit.notes || "");
-      setStatus(starterToEdit.status);
-    } else {
-      setName("");
-      setFlourType("Trigo branco");
-      setLocation("");
-      setNotes("");
-      setStatus("NEW");
-    }
-  }, [starterToEdit, open]);
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
