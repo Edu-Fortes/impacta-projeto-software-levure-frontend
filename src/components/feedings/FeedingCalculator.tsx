@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Starter } from "@/types/starter";
 import { CreateFeedingInput } from "@/types/feeding";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,6 +19,7 @@ import { toast } from "sonner";
 
 interface FeedingCalculatorProps {
   starter: Starter;
+  initialRatio?: string;
   onFeedingCreated: (input: CreateFeedingInput) => Promise<void>;
 }
 
@@ -37,6 +38,7 @@ const RATIO_DESCRIPTIONS: Record<string, string> = {
 
 export function FeedingCalculator({
   starter,
+  initialRatio = "1:2:2",
   onFeedingCreated,
 }: FeedingCalculatorProps) {
   const [calculationMode, setCalculationMode] =
@@ -46,6 +48,12 @@ export function FeedingCalculator({
   const [ambientTemp, setAmbientTemp] = useState<number>(24);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentTime] = useState(() => Date.now());
+
+  useEffect(() => {
+    if (initialRatio) {
+      setSelectedRatio(initialRatio);
+    }
+  }, [initialRatio]);
 
   // Proporção (fermento : água : farinha)
   const ratioParts = useMemo(() => {

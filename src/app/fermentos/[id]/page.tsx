@@ -36,6 +36,7 @@ export default function DetalheFermentoPage() {
   const [starter, setStarter] = useState<Starter | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("alimentar");
+  const [calculatorRatio, setCalculatorRatio] = useState("1:2:2");
   const [latestAnalysis, setLatestAnalysis] = useState<HealthAnalysis | null>(
     null,
   );
@@ -279,7 +280,9 @@ export default function DetalheFermentoPage() {
 
           <TabsContent value="alimentar" className="outline-none">
             <FeedingCalculator
+              key={calculatorRatio}
               starter={starter}
+              initialRatio={calculatorRatio}
               onFeedingCreated={handleCreateFeeding}
             />
           </TabsContent>
@@ -297,6 +300,7 @@ export default function DetalheFermentoPage() {
               initialAnalysis={latestAnalysis}
               feedingsCount={starter.feedings?.length || 0}
               onApplyRecommendedRatio={(ratio) => {
+                setCalculatorRatio(ratio);
                 setActiveTab("alimentar");
               }}
             />
