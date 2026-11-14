@@ -199,58 +199,6 @@ export default function DetalheFermentoPage() {
         </div>
 
         {/* Abas */}
-        {/* <Tabs
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="space-y-6"
-        >
-          <TabsList className="bg-muted/60 p-1">
-            <TabsTrigger
-              value="alimentar"
-              className="text-xs sm:text-sm font-medium"
-            >
-              Alimentar
-            </TabsTrigger>
-            <TabsTrigger
-              value="historico"
-              className="text-xs sm:text-sm font-medium"
-            >
-              Histórico ({starter.feedings?.length || 0})
-            </TabsTrigger>
-            <TabsTrigger
-              value="ia"
-              className="text-xs sm:text-sm font-medium gap-1.5 text-muted-foreground"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              Saúde & IA
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="alimentar" className="outline-none">
-            <FeedingCalculator
-              starter={starter}
-              onFeedingCreated={handleCreateFeeding}
-            />
-          </TabsContent>
-
-          <TabsContent value="historico" className="outline-none">
-            <FeedingHistoryList
-              feedings={starter.feedings || []}
-              onRecordPeak={handleRecordPeak}
-            />
-          </TabsContent>
-
-          <TabsContent value="ia" className="outline-none">
-            <HealthAnalysisTab
-              starterId={starter.id}
-              initialAnalysis={latestAnalysis}
-              feedingsCount={starter.feedings?.length || 0}
-              onApplyRecommendedRatio={(ratio) => {
-                setActiveTab("alimentar");
-              }}
-            />
-          </TabsContent>
-        </Tabs> */}
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}

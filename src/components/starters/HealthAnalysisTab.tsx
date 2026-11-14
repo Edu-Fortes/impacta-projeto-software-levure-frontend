@@ -37,35 +37,27 @@ export function HealthAnalysisTab({
     useState<HealthAnalysis | null>(initialAnalysis);
   const [historyList, setHistoryList] = useState<HealthAnalysis[]>([]);
   const [loading, setLoading] = useState(false);
-  const [loadingHistory, setLoadingHistory] = useState(false);
-
-  // Sincroniza o estado interno quando initialAnalysis chegar do pai
-  useEffect(() => {
-    if (initialAnalysis) {
-      setSelectedAnalysis(initialAnalysis);
-    }
-  }, [initialAnalysis]);
-
-  // Carrega o histórico completo de análises do fermento
-  const loadHistory = async () => {
-    try {
-      setLoadingHistory(true);
-      const data = await aiService.getHistory(starterId);
-      setHistoryList(data);
-      if (data.length > 0 && !selectedAnalysis) {
-        setSelectedAnalysis(data[0]);
-      }
-    } catch {
-      // Falha silenciosa caso seja a primeira vez
-    } finally {
-      setLoadingHistory(false);
-    }
-  };
 
   useEffect(() => {
-    if (starterId) {
-      loadHistory();
-    }
+    if (!starterId) return;
+
+    let cancelled = false;
+    void aiService
+      .getHistory(starterId)
+      .then((data) => {
+        if (cancelled) return;
+        setHistoryList(data);
+        if (data.length > 0) {
+          setSelectedAnalysis((current) => current ?? data[0]);
+        }
+      })
+      .catch(() => {
+        // Falha silenciosa caso seja a primeira vez
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [starterId]);
 
   const handleGenerateAnalysis = async () => {
