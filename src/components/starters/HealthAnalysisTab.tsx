@@ -27,6 +27,13 @@ interface HealthAnalysisTabProps {
   onApplyRecommendedRatio?: (ratio: string) => void;
 }
 
+const healthStatusLabels: Record<HealthAnalysis["status"], string> = {
+  EXCELLENT: "Excelente",
+  GOOD: "Bom",
+  NEEDS_ATTENTION: "Precisa de atenção",
+  CRITICAL: "Crítico",
+};
+
 export function HealthAnalysisTab({
   starterId,
   initialAnalysis,
@@ -246,7 +253,7 @@ export function HealthAnalysisTab({
                   </div>
                 </div>
                 <Badge variant="outline" className="font-medium text-xs">
-                  Status: {selectedAnalysis.status}
+                  Status: {healthStatusLabels[selectedAnalysis.status]}
                 </Badge>
               </CardContent>
             </Card>
