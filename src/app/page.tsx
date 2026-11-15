@@ -8,9 +8,8 @@ import { Header } from "@/components/layout/Header";
 import { StarterCard } from "@/components/starters/StarterCard";
 import { UpcomingPeakCard } from "@/components/feedings/UpcomingPeakCard";
 import { StarterFormModal } from "@/components/starters/StarterFormModal";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Search, Sparkles } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { toast } from "sonner";
 import { DeleteStarterDialog } from "@/components/starters/DeleteStarterDialog";
 import { StatsCard } from "@/components/layout/StatsCard";
@@ -39,7 +38,20 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
-    loadData();
+    const load = async () => {
+      try {
+        const [startersData, summaryData] = await Promise.all([
+          startersService.getAll(),
+          startersService.getSummary(),
+        ]);
+        setStarters(startersData);
+        setSummary(summaryData);
+      } catch {
+        toast.error("Erro ao carregar dados do painel.");
+      }
+    };
+
+    void load();
   }, []);
 
   const handleSaveStarter = async (data: CreateStarterInput) => {
@@ -67,6 +79,7 @@ export default function DashboardPage() {
       toast.error("Erro ao excluir fermento.");
     } finally {
       setStarterToDelete(null);
+      setStarterToEdit(null);
     }
   };
 
@@ -94,7 +107,10 @@ export default function DashboardPage() {
           </div>
 
           <Button
-            onClick={() => setModalOpen(true)}
+            onClick={() => {
+              setStarterToEdit(null);
+              setModalOpen(true);
+            }}
             className="gap-2 font-medium"
           >
             <Plus className="w-4 h-4" /> Novo fermento
@@ -204,8 +220,12 @@ export default function DashboardPage() {
 
       {/* Modal de Criação */}
       <StarterFormModal
+        key={`${modalOpen}-${starterToEdit?.id ?? "new"}`}
         open={modalOpen}
-        onOpenChange={setModalOpen}
+        onOpenChange={(open) => {
+          setModalOpen(open);
+          if (!open) setStarterToEdit(null);
+        }}
         starterToEdit={starterToEdit}
         onSubmit={handleSaveStarter}
       />

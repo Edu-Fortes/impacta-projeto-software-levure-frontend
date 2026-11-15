@@ -19,6 +19,7 @@ import { toast } from "sonner";
 
 interface FeedingCalculatorProps {
   starter: Starter;
+  initialRatio?: string;
   onFeedingCreated: (input: CreateFeedingInput) => Promise<void>;
 }
 
@@ -37,14 +38,16 @@ const RATIO_DESCRIPTIONS: Record<string, string> = {
 
 export function FeedingCalculator({
   starter,
+  initialRatio = "1:2:2",
   onFeedingCreated,
 }: FeedingCalculatorProps) {
   const [calculationMode, setCalculationMode] =
     useState<CalculationMode>("starter");
   const [inputValue, setInputValue] = useState<number>(30); // Valor padrão em gramas
-  const [selectedRatio, setSelectedRatio] = useState("1:2:2");
+  const [selectedRatio, setSelectedRatio] = useState(initialRatio);
   const [ambientTemp, setAmbientTemp] = useState<number>(24);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentTime] = useState(() => Date.now());
 
   // Proporção (fermento : água : farinha)
   const ratioParts = useMemo(() => {
@@ -134,7 +137,7 @@ export function FeedingCalculator({
     const formattedDuration =
       minutes > 0 ? `${hours}h ${minutes}min` : `${hours}h`;
 
-    const targetDate = new Date(Date.now() + estimatedMinutes * 60 * 1000);
+    const targetDate = new Date(currentTime + estimatedMinutes * 60 * 1000);
     const formattedTargetTime = targetDate.toLocaleTimeString("pt-BR", {
       hour: "2-digit",
       minute: "2-digit",
@@ -146,7 +149,7 @@ export function FeedingCalculator({
       isCalibrated,
       samplesCount: historicalFeedings.length,
     };
-  }, [starter.feedings, selectedRatio, ambientTemp]);
+  }, [starter.feedings, selectedRatio, ambientTemp, currentTime]);
 
   const handleSubmit = async () => {
     if (

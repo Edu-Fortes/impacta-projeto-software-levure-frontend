@@ -42,6 +42,14 @@ Interface moderna e responsiva para acompanhamento da saúde, cálculos de alime
 - **Modal de Registro de Pico Real:** Permite marcar o horário exato em que o cultivo atingiu o ápice, o multiplicador de crescimento do volume (ex: 2.5x, 3.0x) e o perfil aromático.
 - **Seção de Próximos Picos no Dashboard:** Cards na coluna lateral do painel exibindo o status de fermentação (`Subindo` ou `Pico atingido`), temperatura e horário previsto em fonte monospace.
 
+### Sprint 4: Diagnóstico Especialista com IA (Google Gemini)
+
+- **Laudo Biológico Estruturado:** Análise de vigor, acidez acumulada e estresse térmico com retorno estritamente tipado via Gemini API.
+- **Índice de Vitalidade:** Medidor de saúde de 0 a 100 com alertas visuais.
+- **Veredito de Fornada:** Indicação clara se a cultura está apta para panificar no dia ou se exige reforço.
+- **Histórico de Diagnósticos:** Carrossel de laudos anteriores persistidos no banco.
+- **Feedback Loop Ativo:** Botão de prescrição que injeta a proporção sugerida diretamente na calculadora de alimentação.
+
 ---
 
 ## Como Executar com Docker (Recomendado para Avaliação)

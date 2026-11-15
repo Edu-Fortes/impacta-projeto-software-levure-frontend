@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Feeding } from "@/types/feeding";
 import { Starter } from "@/types/starter";
@@ -19,13 +20,14 @@ interface UpcomingPeakCardProps {
 
 export function UpcomingPeakCard({ starter, feeding }: UpcomingPeakCardProps) {
   const router = useRouter();
+  const [currentTime] = useState(() => Date.now());
   const theme = FLOUR_PALETTE[starter.flourType] || {
     bg: "bg-muted/40",
     text: "text-primary",
   };
 
   const peakTime = new Date(feeding.estimatedPeakTime);
-  const isPast = Date.now() > peakTime.getTime() || !!feeding.actualPeakTime;
+  const isPast = currentTime > peakTime.getTime() || !!feeding.actualPeakTime;
 
   const formattedTime = peakTime.toLocaleTimeString("pt-BR", {
     hour: "2-digit",
