@@ -19,6 +19,7 @@ import { toast } from "sonner";
 
 interface FeedingCalculatorProps {
   starter: Starter;
+  initialRatio?: string;
   onFeedingCreated: (input: CreateFeedingInput) => Promise<void>;
 }
 
@@ -37,12 +38,13 @@ const RATIO_DESCRIPTIONS: Record<string, string> = {
 
 export function FeedingCalculator({
   starter,
+  initialRatio = "1:2:2",
   onFeedingCreated,
 }: FeedingCalculatorProps) {
   const [calculationMode, setCalculationMode] =
     useState<CalculationMode>("starter");
   const [inputValue, setInputValue] = useState<number>(30); // Valor padrão em gramas
-  const [selectedRatio, setSelectedRatio] = useState("1:2:2");
+  const [selectedRatio, setSelectedRatio] = useState(initialRatio);
   const [ambientTemp, setAmbientTemp] = useState<number>(24);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentTime] = useState(() => Date.now());
